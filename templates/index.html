@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App de Tareas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4361ee',
+                        secondary: '#3f37c9',
+                        accent: '#4895ef',
+                        danger: '#f72585',
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .task-item:hover .task-actions {
+                @apply opacity-100;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl">
+        <div class="p-8">
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <h1 class="text-3xl font-bold text-primary mb-2">Lista de Tareas</h1>
+                <p class="text-gray-500">Gestiona tus actividades diarias</p>
+            </div>
+
+            <!-- Formulario -->
+            <form action="/agregar" method="POST" class="mb-8 flex gap-2">
+                <input 
+                    type="text" 
+                    name="contenido" 
+                    placeholder="Escribe una tarea" 
+                    required
+                    class="flex-1 px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition"
+                >
+                <button 
+                    type="submit"
+                    class="px-6 py-3 bg-primary text-white font-medium rounded-lg hover:bg-secondary transition-colors shadow-md hover:shadow-lg"
+                >
+                    <i class="fas fa-plus mr-2"></i> Agregar
+                </button>
+            </form>
+
+            <!-- Lista de tareas -->
+            <div class="space-y-3">
+                {% for tarea in tareas %}
+                <div class="task-item group flex items-center justify-between p-4 bg-white rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors">
+                    <div class="flex items-center">
+                        <!-- Checkbox -->
+                        <a 
+                            href="/completar/{{ tarea.id }}" 
+                            class="task-actions opacity-0 group-hover:opacity-100 transition-opacity mr-3 flex items-center justify-center w-7 h-7 rounded-full {% if tarea.completada %}bg-green-500 text-white{% else %}border-2 border-gray-300 text-transparent{% endif %} hover:bg-green-500 hover:text-white hover:border-transparent"
+                        >
+                            <i class="fas fa-check text-xs"></i>
+                        </a>
+                        
+                        <!-- Contenido -->
+                        <span class="{% if tarea.completada %}line-through text-gray-400{% else %}text-gray-700{% endif %}">
+                            {{ tarea.contenido }}
+                        </span>
+                    </div>
+                    
+                    <!-- Botón eliminar -->
+                    <a 
+                        href="/eliminar/{{ tarea.id }}" 
+                        class="task-actions opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center w-7 h-7 rounded-full bg-danger text-white hover:bg-red-700"
+                    >
+                        <i class="fas fa-times text-xs"></i>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>
