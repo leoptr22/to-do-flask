@@ -13,14 +13,14 @@ class Tarea(db.Model):
     contenido = db.Column(db.String(200))
     completada = db.Column(db.Boolean, default=False)
 
-# Crear la base de datos (ejecutar solo una vez)
+# Creo la base de datos 
 with app.app_context():
     db.create_all()
 
 # Rutas de la aplicación
 @app.route('/')
 def index():
-    tareas = Tarea.query.all()  # Obtener todas las tareas
+    tareas = Tarea.query.all()  # Obtengo todas las tareas
     return render_template('index.html', tareas=tareas)
 
 @app.route('/agregar', methods=['POST'])
